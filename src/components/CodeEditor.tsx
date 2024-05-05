@@ -12,11 +12,23 @@ const CodeEditor = () => {
   const editorRef = useRef();
   const [value, setValue] = useState<string | undefined>("");
   const [language, setLanguage] = useState("javascript");
-
-  const onMount = (editor: any) => {
-    editorRef.current = editor;
-    editor.focus();
-  };
+  const [selection, setSelection] = useState("");
+  // select code in range on drag  in monaco editor
+  // const onMount = (editor: any) => {
+  //   editorRef.current = editor;
+  //   editor.onMouseDown((e: any) => {
+  //     if (e.target.type === 9) {
+  //       const selection = editor.getSelection();
+  //       const range = new editor.monaco.Range(
+  //         selection.startLineNumber,
+  //         selection.startColumn,
+  //         selection.endLineNumber,
+  //         selection.endColumn
+  //       );
+  //       editor.setSelection(range);
+  //     }
+  //   });
+  // };
 
   const onSelect = (language: string) => {
     console.log(language);
@@ -53,12 +65,13 @@ const CodeEditor = () => {
             },
             wordWrap: "on",
             autoClosingBrackets: "always",
+            multiCursorModifier: "alt",
           }}
           height={"100%"}
           theme={theme === "dark" ? "myDarkTheme" : "vs-light"}
           language={language}
           defaultValue={CODE_SNIPPETS[language]}
-          onMount={onMount}
+          // onMount={onMount}
           value={value}
           onChange={(value) => setValue(value)}
         />
