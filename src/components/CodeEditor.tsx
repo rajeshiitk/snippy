@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
-import { Editor } from "@monaco-editor/react";
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { Editor, loader } from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { CODE_SNIPPETS } from "../constants";
 import { useTheme } from "next-themes";
@@ -9,19 +10,31 @@ import { PlayIcon } from "lucide-react";
 const CodeEditor = () => {
   const { theme } = useTheme();
   const editorRef = useRef();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string | undefined>("");
   const [language, setLanguage] = useState("javascript");
 
-  const onMount = (editor) => {
+  const onMount = (editor: any) => {
     editorRef.current = editor;
     editor.focus();
   };
 
-  const onSelect = (language) => {
+  const onSelect = (language: string) => {
     console.log(language);
     setLanguage(language);
     setValue(CODE_SNIPPETS[language]);
   };
+  useEffect(() => {
+    loader.init().then((monaco) => {
+      monaco.editor.defineTheme("myDarkTheme", {
+        base: "vs-dark",
+        inherit: true,
+        rules: [],
+        colors: {
+          "editor.background": "#020213",
+        },
+      });
+    });
+  }, []);
 
   return (
     <div className="flex w-full h-full gap-4">
@@ -42,7 +55,7 @@ const CodeEditor = () => {
             autoClosingBrackets: "always",
           }}
           height={"100%"}
-          theme={theme === "dark" ? "vs-dark" : "vs-light"}
+          theme={theme === "dark" ? "myDarkTheme" : "vs-light"}
           language={language}
           defaultValue={CODE_SNIPPETS[language]}
           onMount={onMount}

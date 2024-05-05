@@ -3,7 +3,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -12,7 +11,12 @@ import { LANGUAGE_VERSIONS } from "../constants";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 
-const LanguageSelector = ({ language, onSelect }) => {
+interface LanguageSelectorProps {
+  language: string;
+  onSelect: (lang: string) => void;
+}
+
+const LanguageSelector = ({ language, onSelect }: LanguageSelectorProps) => {
   return (
     <Select
       onValueChange={(lang) => {
